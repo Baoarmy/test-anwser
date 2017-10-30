@@ -1,0 +1,76 @@
+1. Given a collection of numbers that might contain duplicates, return all possible unique permutations. For example, [1,1,2] have the following unique permutations:
+[1,1,2], [1,2,1], and [2,1,1].
+
+method_1:
+
+# encoding=utf-8
+import itertools
+li = list(input('请输入:'))  #直接输入数字，并用逗号隔开（如：1,2,3）
+# li = [1,1,2,3]
+for li in list(set(list(itertools.permutations(li,len(li))))):
+    print list(li)
+
+method_2:
+
+# coding=utf-8
+def gen_lists(li):
+    if len(li) <= 1:
+        yield li
+    else:
+        for gen_list in gen_lists(li[1:]):
+            for i in range(len(li)):
+                yield gen_list[:i] + li[0:1] + gen_list[i:]
+
+
+def result(li):
+    rev_lists = []
+    new_lists = []
+    for item in list(gen_lists(li)):
+        rev_lists.append(item)
+    for elment in rev_lists:
+        if elment not in new_lists:
+            new_lists.append(elment)
+    return new_lists
+
+if __name__ == '__main__':
+    li = [1,1,2,3]
+    print (result(li))
+
+
+
+
+
+
+
+
+
+
+
+2. Given two words word1 and word2, find the minimum number of steps required to convert word1 to word2. (each operation is counted as 1 step.)
+You have the following 3 operations permitted on a word:
+a) Insert a character
+b) Delete a character
+c) Replace a character
+
+Answer：
+
+
+# coding=utf-8
+class Solution:
+    
+    def minDistance(self, word1, word2):
+        data = [[0 for c in range(len(word2) + 1)] for r in range(len(word1) + 1)]
+
+        for r in range(len(data)):
+            for c in range(len(data[0])):
+                if not r or not c:  # r is 0 or c is 0
+                    data[r][c] = r + c
+                else:
+                    data[r][c] = min(data[r][c - 1] + 1, data[r - 1][c] + 1, data[r - 1][c - 1] + (word1[r - 1] != word2[c - 1]))
+        return data[len(word1)][len(word2)]
+
+if __name__ == '__main__':
+    solution = Solution()
+    print solution.minDistance('abcde','fghi')
+
+
